@@ -1,0 +1,38 @@
+[
+  {
+    "name": "Asha Verma",
+    "email": "asha.demo@example.com",
+    "password": "Demo@12345",
+    "age": 27,
+    "height_cm": 162,
+    "weight_kg": 58,
+    "activity_level": "moderate",
+    "dietary_preference": "vegetarian",
+    "goal": "general balanced eating",
+    "allergies": "peanuts"
+  },
+  {
+    "name": "Rohan Iyer",
+    "email": "rohan.demo@example.com",
+    "password": "Demo@12345",
+    "age": 31,
+    "height_cm": 175,
+    "weight_kg": 80,
+    "activity_level": "active",
+    "dietary_preference": "non_vegetarian",
+    "goal": "fitness-oriented demo",
+    "allergies": ""
+  },
+  {
+    "name": "Maya Fernandes",
+    "email": "maya.demo@example.com",
+    "password": "Demo@12345",
+    "age": 24,
+    "height_cm": 168,
+    "weight_kg": 63,
+    "activity_level": "light",
+    "dietary_preference": "vegan",
+    "goal": "weight-management demo",
+    "allergies": "soy"
+  }
+]

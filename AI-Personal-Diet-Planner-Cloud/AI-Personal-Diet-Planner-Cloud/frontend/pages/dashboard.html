@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dashboard — plateWise</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="topbar">
+    <div class="brand"><a href="/">plate<span>wise</span></a></div>
+    <div class="nav-links">
+      <a href="/pages/profile.html">Profile</a>
+      <a href="/pages/generate.html">New plan</a>
+      <a href="/pages/saved_plans.html">Plans</a>
+      <a href="/pages/files.html">Files</a>
+      <a href="#" id="logout-link">Log out</a>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <h1 id="welcome">Welcome</h1>
+
+    <div class="dashboard-grid">
+      <div class="stat">
+        <div class="label">Current goal</div>
+        <div class="value" id="stat-goal">—</div>
+      </div>
+      <div class="stat">
+        <div class="label">Diet preference</div>
+        <div class="value" id="stat-pref">—</div>
+      </div>
+      <div class="stat">
+        <div class="label">Saved plans</div>
+        <div class="value" id="stat-plans">—</div>
+      </div>
+      <div class="stat">
+        <div class="label">Uploaded files</div>
+        <div class="value" id="stat-files">—</div>
+      </div>
+    </div>
+
+    <h2>Latest plan</h2>
+    <div id="latest-plan"><p>No plans yet.</p></div>
+
+    <h2>Quick actions</h2>
+    <a class="btn" href="/pages/generate.html">Generate new plan</a>
+    <a class="btn btn-secondary" href="/pages/saved_plans.html">View all plans</a>
+    <a class="btn btn-secondary" href="/pages/files.html">Uploaded files</a>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script>
+    Api.requireLogin();
+
+    async function load() {
+      try {
+        const [profile, plansData, filesData] = await Promise.all([
+          Api.getProfile(), Api.listPlans(), Api.listFiles()
+        ]);
+
+        document.getElementById("welcome").textContent = `Welcome, ${profile.name}`;
+        document.getElementById("stat-goal").textContent = profile.goal || "Not set";
+        document.getElementById("stat-pref").textContent = profile.dietary_preference || "Not set";
+        document.getElementById("stat-plans").textContent = plansData.plans.length;
+        document.getElementById("stat-files").textContent = filesData.files.length;
+
+        const latestEl = document.getElementById("latest-plan");
+        if (plansData.plans.length) {
+          const p = plansData.plans[0];
+          latestEl.innerHTML = `
+            <div class="meal-block"><h3>Breakfast</h3><p>${p.breakfast}</p></div>
+            <div class="meal-block"><h3>Lunch</h3><p>${p.lunch}</p></div>
+            <div class="meal-block"><h3>Snack</h3><p>${p.snack}</p></div>
+            <div class="meal-block"><h3>Dinner</h3><p>${p.dinner}</p></div>
+            <p class="plan-meta">${p.nutrition_summary}</p>
+          `;
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+    load();
+
+    document.getElementById("logout-link").addEventListener("click", async (e) => {
+      e.preventDefault();
+      await Api.logout();
+      Api.clearToken();
+      window.location.href = "/";
+    });
+  </script>
+</body>
+</html>

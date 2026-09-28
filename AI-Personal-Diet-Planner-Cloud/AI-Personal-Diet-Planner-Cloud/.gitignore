@@ -1,0 +1,22 @@
+# Environment / secrets
+.env
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.egg-info/
+
+# Local "cloud" simulation data (do not commit real/demo user data or files)
+cloud_db.sqlite3
+storage_bucket/*
+!storage_bucket/.gitkeep
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
+
+# Test cache
+.pytest_cache/

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cloud files — plateWise</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="topbar">
+    <div class="brand"><a href="/">plate<span>wise</span></a></div>
+    <div class="nav-links">
+      <a href="/pages/dashboard.html">Dashboard</a>
+      <a href="#" id="logout-link">Log out</a>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <h1>Cloud files</h1>
+    <p class="subtitle">Upload a demo meal photo or exported plan. Files go to cloud object storage — separate from the structured plan data in the database.</p>
+
+    <div class="form-card">
+      <label for="file-input">Choose a file (png, jpg, pdf, txt, csv — max 5MB)</label>
+      <input id="file-input" type="file">
+      <button id="upload-btn">Upload</button>
+      <div id="upload-msg"></div>
+    </div>
+
+    <h2>Your files</h2>
+    <div id="files-list"></div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script>
+    Api.requireLogin();
+    const filesList = document.getElementById("files-list");
+    const uploadMsg = document.getElementById("upload-msg");
+
+    async function loadFiles() {
+      try {
+        const { files } = await Api.listFiles();
+        if (!files.length) {
+          filesList.innerHTML = `<p>No files uploaded yet.</p>`;
+          return;
+        }
+        filesList.innerHTML = files.map(f => `
+          <div class="list-item">
+            <div>
+              <strong>${f.filename}</strong>
+              <div class="plan-meta">${new Date(f.uploaded_at).toLocaleString()}</div>
+            </div>
+            <div>
+              <a class="btn btn-secondary" style="margin:0;" href="/api/files/${f.file_id}" target="_blank">Download</a>
+              <button class="btn-danger" data-id="${f.file_id}" style="margin:0;">Delete</button>
+            </div>
+          </div>
+        `).join("");
+
+        filesList.querySelectorAll("button[data-id]").forEach(btn => {
+          btn.addEventListener("click", async () => {
+            await Api.deleteFile(btn.dataset.id);
+            loadFiles();
+          });
+        });
+      } catch (err) {
+        filesList.innerHTML = `<div class="error-msg">${err.message}</div>`;
+      }
+    }
+    loadFiles();
+
+    document.getElementById("upload-btn").addEventListener("click", async () => {
+      const input = document.getElementById("file-input");
+      if (!input.files.length) {
+        uploadMsg.innerHTML = `<div class="error-msg">Choose a file first.</div>`;
+        return;
+      }
+      try {
+        await Api.uploadFile(input.files[0]);
+        uploadMsg.innerHTML = `<div class="success-msg">Uploaded.</div>`;
+        input.value = "";
+        loadFiles();
+      } catch (err) {
+        uploadMsg.innerHTML = `<div class="error-msg">${err.message}</div>`;
+      }
+    });
+
+    document.getElementById("logout-link").addEventListener("click", async (e) => {
+      e.preventDefault();
+      await Api.logout();
+      Api.clearToken();
+      window.location.href = "/";
+    });
+  </script>
+</body>
+</html>

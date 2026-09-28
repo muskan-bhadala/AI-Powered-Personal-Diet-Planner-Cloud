@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Your profile — plateWise</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="topbar">
+    <div class="brand"><a href="/">plate<span>wise</span></a></div>
+    <div class="nav-links">
+      <a href="/pages/dashboard.html">Dashboard</a>
+      <a href="#" id="logout-link">Log out</a>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <h1>Your profile</h1>
+    <p class="subtitle">Demo fields only — nothing here is used for medical purposes.</p>
+    <div class="disclaimer">This information is used only to shape example meal suggestions, not to diagnose or treat anything.</div>
+
+    <div class="form-card">
+      <form id="profile-form">
+        <label for="name">Name</label>
+        <input id="name" type="text">
+
+        <label for="age">Age</label>
+        <input id="age" type="number" min="1" max="120">
+
+        <label for="height_cm">Height (cm)</label>
+        <input id="height_cm" type="number" min="1">
+
+        <label for="weight_kg">Weight (kg)</label>
+        <input id="weight_kg" type="number" min="1">
+
+        <label for="activity_level">Activity level</label>
+        <select id="activity_level">
+          <option value="">Select…</option>
+          <option value="sedentary">Sedentary</option>
+          <option value="light">Light</option>
+          <option value="moderate">Moderate</option>
+          <option value="active">Active</option>
+        </select>
+
+        <label for="dietary_preference">Dietary preference</label>
+        <select id="dietary_preference">
+          <option value="">Select…</option>
+          <option value="vegetarian">Vegetarian</option>
+          <option value="vegan">Vegan</option>
+          <option value="non_vegetarian">Non-vegetarian</option>
+        </select>
+
+        <label for="goal">Goal</label>
+        <select id="goal">
+          <option value="general balanced eating">General balanced eating</option>
+          <option value="weight-management demo">Weight-management demo</option>
+          <option value="fitness-oriented demo">Fitness-oriented demo</option>
+        </select>
+
+        <label for="allergies">Allergies / preferences to avoid (optional)</label>
+        <input id="allergies" type="text" placeholder="e.g. peanuts, dairy">
+
+        <button type="submit">Save profile</button>
+      </form>
+      <div id="msg"></div>
+    </div>
+
+    <a class="btn btn-secondary" href="/pages/generate.html">Continue to generate a plan →</a>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script>
+    Api.requireLogin();
+
+    async function loadProfile() {
+      try {
+        const profile = await Api.getProfile();
+        document.getElementById("name").value = profile.name || "";
+        document.getElementById("age").value = profile.age || "";
+        document.getElementById("height_cm").value = profile.height_cm || "";
+        document.getElementById("weight_kg").value = profile.weight_kg || "";
+        document.getElementById("activity_level").value = profile.activity_level || "";
+        document.getElementById("dietary_preference").value = profile.dietary_preference || "";
+        document.getElementById("goal").value = profile.goal || "general balanced eating";
+        document.getElementById("allergies").value = profile.allergies || "";
+      } catch (err) {
+        console.error(err);
+      }
+    }
+    loadProfile();
+
+    document.getElementById("profile-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const msg = document.getElementById("msg");
+      msg.innerHTML = "";
+      const fields = {
+        name: document.getElementById("name").value.trim(),
+        age: Number(document.getElementById("age").value) || null,
+        height_cm: Number(document.getElementById("height_cm").value) || null,
+        weight_kg: Number(document.getElementById("weight_kg").value) || null,
+        activity_level: document.getElementById("activity_level").value || null,
+        dietary_preference: document.getElementById("dietary_preference").value || null,
+        goal: document.getElementById("goal").value || null,
+        allergies: document.getElementById("allergies").value.trim() || null,
+      };
+      try {
+        await Api.updateProfile(fields);
+        msg.innerHTML = `<div class="success-msg">Profile saved.</div>`;
+      } catch (err) {
+        msg.innerHTML = `<div class="error-msg">${err.message}</div>`;
+      }
+    });
+
+    document.getElementById("logout-link").addEventListener("click", async (e) => {
+      e.preventDefault();
+      await Api.logout();
+      Api.clearToken();
+      window.location.href = "/";
+    });
+  </script>
+</body>
+</html>

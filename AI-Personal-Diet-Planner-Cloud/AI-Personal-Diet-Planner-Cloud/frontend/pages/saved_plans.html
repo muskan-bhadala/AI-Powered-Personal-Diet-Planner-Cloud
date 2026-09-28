@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Saved plans — plateWise</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="topbar">
+    <div class="brand"><a href="/">plate<span>wise</span></a></div>
+    <div class="nav-links">
+      <a href="/pages/dashboard.html">Dashboard</a>
+      <a href="#" id="logout-link">Log out</a>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <h1>Saved plans</h1>
+    <div id="plans-list"></div>
+    <a class="btn btn-secondary" href="/pages/generate.html">Generate a new plan</a>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script>
+    Api.requireLogin();
+    const listEl = document.getElementById("plans-list");
+
+    async function load() {
+      try {
+        const { plans } = await Api.listPlans();
+        if (!plans.length) {
+          listEl.innerHTML = `<p>No saved plans yet.</p>`;
+          return;
+        }
+        listEl.innerHTML = plans.map(p => `
+          <div class="list-item">
+            <div>
+              <strong>${new Date(p.created_at).toLocaleString()}</strong>
+              <div class="plan-meta">${p.breakfast} · ${p.lunch} · ${p.snack} · ${p.dinner}</div>
+            </div>
+            <button class="btn-secondary" data-id="${p.plan_id}" style="margin:0;">Delete</button>
+          </div>
+        `).join("");
+
+        listEl.querySelectorAll("button[data-id]").forEach(btn => {
+          btn.addEventListener("click", async () => {
+            await Api.deletePlan(btn.dataset.id);
+            load();
+          });
+        });
+      } catch (err) {
+        listEl.innerHTML = `<div class="error-msg">${err.message}</div>`;
+      }
+    }
+    load();
+
+    document.getElementById("logout-link").addEventListener("click", async (e) => {
+      e.preventDefault();
+      await Api.logout();
+      Api.clearToken();
+      window.location.href = "/";
+    });
+  </script>
+</body>
+</html>

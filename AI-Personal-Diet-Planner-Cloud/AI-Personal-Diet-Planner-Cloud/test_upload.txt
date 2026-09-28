@@ -1,0 +1,2 @@
+AI Personal Diet Planner - Storage Test
+This is a sample file used to test the project's cloud storage functionality.

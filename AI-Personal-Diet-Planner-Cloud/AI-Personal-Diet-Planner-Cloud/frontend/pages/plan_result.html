@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Your plan — plateWise</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="topbar">
+    <div class="brand"><a href="/">plate<span>wise</span></a></div>
+    <div class="nav-links">
+      <a href="/pages/dashboard.html">Dashboard</a>
+      <a href="#" id="logout-link">Log out</a>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <h1>Your plan is ready</h1>
+    <div class="disclaimer">General wellness example only — not medical or clinical nutrition advice.</div>
+
+    <div id="plan-container"></div>
+
+    <a class="btn" href="/pages/saved_plans.html">View saved plans</a>
+    <a class="btn btn-secondary" href="/pages/generate.html">Generate another</a>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script>
+    Api.requireLogin();
+    const raw = sessionStorage.getItem("latest_plan");
+    const container = document.getElementById("plan-container");
+
+    if (!raw) {
+      container.innerHTML = `<p>No plan found. <a href="/pages/generate.html">Generate one.</a></p>`;
+    } else {
+      const data = JSON.parse(raw);
+      const p = data.plan;
+      container.innerHTML = `
+        <div class="meal-block"><h3>Breakfast</h3><p>${p.breakfast}</p></div>
+        <div class="meal-block"><h3>Lunch</h3><p>${p.lunch}</p></div>
+        <div class="meal-block"><h3>Snack</h3><p>${p.snack}</p></div>
+        <div class="meal-block"><h3>Dinner</h3><p>${p.dinner}</p></div>
+        <p class="plan-meta">${p.nutrition_summary}</p>
+        <p class="plan-meta">💧 ${p.hydration_reminder}</p>
+        <p class="plan-meta">Source: ${data.source === "ai_api" ? "External AI API" : "Local rule-based engine (fallback-safe)"}</p>
+      `;
+    }
+
+    document.getElementById("logout-link").addEventListener("click", async (e) => {
+      e.preventDefault();
+      await Api.logout();
+      Api.clearToken();
+      window.location.href = "/";
+    });
+  </script>
+</body>
+</html>

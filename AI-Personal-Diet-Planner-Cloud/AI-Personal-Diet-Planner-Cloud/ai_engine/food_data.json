@@ -1,0 +1,70 @@
+{
+  "vegetarian": {
+    "breakfast": [
+      {"item": "Vegetable oats upma with peanuts", "calories": 320},
+      {"item": "Greek yogurt with berries and granola", "calories": 300},
+      {"item": "Besan (chickpea flour) vegetable omelette", "calories": 280},
+      {"item": "Whole-grain toast with avocado and tomato", "calories": 310}
+    ],
+    "lunch": [
+      {"item": "Paneer and mixed vegetable stir-fry with brown rice", "calories": 520},
+      {"item": "Rajma (kidney bean) curry with quinoa", "calories": 500},
+      {"item": "Chickpea and spinach curry with whole-wheat roti", "calories": 480},
+      {"item": "Vegetable pulao with cucumber raita", "calories": 460}
+    ],
+    "snack": [
+      {"item": "Roasted chana (chickpeas) with a mint chutney", "calories": 160},
+      {"item": "Fruit salad with a sprinkle of chia seeds", "calories": 150},
+      {"item": "Handful of mixed nuts and a small apple", "calories": 190}
+    ],
+    "dinner": [
+      {"item": "Lentil (dal) soup with steamed vegetables", "calories": 420},
+      {"item": "Grilled tofu with sautéed greens", "calories": 400},
+      {"item": "Vegetable khichdi with a side salad", "calories": 440}
+    ]
+  },
+  "vegan": {
+    "breakfast": [
+      {"item": "Overnight oats with almond milk and banana", "calories": 300},
+      {"item": "Tofu scramble with spinach and turmeric", "calories": 280},
+      {"item": "Smoothie bowl with oat milk, berries and flaxseed", "calories": 310}
+    ],
+    "lunch": [
+      {"item": "Chickpea and vegetable Buddha bowl with tahini", "calories": 500},
+      {"item": "Black bean and quinoa salad", "calories": 480},
+      {"item": "Vegetable stir-fry with tofu over brown rice", "calories": 510}
+    ],
+    "snack": [
+      {"item": "Hummus with carrot and cucumber sticks", "calories": 170},
+      {"item": "Trail mix with dried fruit and seeds", "calories": 200},
+      {"item": "Roasted edamame", "calories": 150}
+    ],
+    "dinner": [
+      {"item": "Lentil and vegetable stew", "calories": 410},
+      {"item": "Grilled tempeh with roasted vegetables", "calories": 430},
+      {"item": "Vegetable curry with cauliflower rice", "calories": 380}
+    ]
+  },
+  "non_vegetarian": {
+    "breakfast": [
+      {"item": "Boiled eggs with whole-grain toast", "calories": 330},
+      {"item": "Greek yogurt with honey and mixed seeds", "calories": 300},
+      {"item": "Vegetable and egg-white omelette", "calories": 290}
+    ],
+    "lunch": [
+      {"item": "Grilled chicken breast with brown rice and broccoli", "calories": 550},
+      {"item": "Baked fish with quinoa and sautéed spinach", "calories": 520},
+      {"item": "Turkey and vegetable wrap with a side salad", "calories": 490}
+    ],
+    "snack": [
+      {"item": "Boiled egg with a small handful of almonds", "calories": 180},
+      {"item": "Greek yogurt with a sprinkle of granola", "calories": 170},
+      {"item": "Sliced chicken breast with cherry tomatoes", "calories": 160}
+    ],
+    "dinner": [
+      {"item": "Grilled salmon with steamed vegetables", "calories": 460},
+      {"item": "Chicken and vegetable soup with a whole-grain roll", "calories": 420},
+      {"item": "Lean beef stir-fry with mixed peppers", "calories": 470}
+    ]
+  }
+}
